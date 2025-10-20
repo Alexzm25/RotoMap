@@ -1,5 +1,5 @@
 # ========================
-# C++ / Qt Project .gitignore
+# C++ / Qt Project (.gitignore)
 # ========================
 
 # Prerequisites
@@ -26,10 +26,6 @@
 *.dylib
 *.dll
 
-# Fortran module files
-*.mod
-*.smod
-
 # Compiled Static libraries
 *.lai
 *.la
@@ -48,7 +44,7 @@
 # Qt Specific
 # ========================
 
-# Build directories (Qt Creator, qmake, CMake)
+# Build directories (Qt Creator, qmake, CMake, Visual Studio)
 build*/
 Build*/
 out/
@@ -71,14 +67,12 @@ qrc_*.cpp
 ui_*.h
 *.moc
 
-# Qt project autosave
-*.autosave
-
-# Temporary Qt files
+# Qt temporary or cache files
 *.qmlc
 *.jsc
 *.cache
 *.qmake.stash
+*.autosave
 
 # Qt installer framework
 *.pkg
@@ -87,10 +81,11 @@ ui_*.h
 *.qtifws
 
 # ========================
-# IDE Specific (optional)
+# Visual Studio / MSBuild
 # ========================
 
-# Visual Studio / VS Code
+# Visual Studio build and cache folders
+.vs/
 .vscode/
 *.tlog
 *.log
@@ -103,11 +98,19 @@ ui_*.h
 *.VC.db
 *.VC.opendb
 
-# Qt Creator
-*.creator
-*.creator.user
-*.creator.user.*
+# Visual Studio temporary user data
+*.vcxproj.user
+*.db
+*.vsidx
+*.backup.json
 
-# Mac / Windows junk files
+# Visual Studio layout/cache folders
+v17/
+.vsconfig
+
+# ========================
+# OS generated files
+# ========================
 .DS_Store
 Thumbs.db
+desktop.ini
