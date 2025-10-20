@@ -1,3 +1,7 @@
+# ========================
+# C++ / Qt Project .gitignore
+# ========================
+
 # Prerequisites
 *.d
 
@@ -37,5 +41,73 @@
 *.out
 *.app
 
-# debug information files
+# Debug information files
 *.dwo
+
+# ========================
+# Qt Specific
+# ========================
+
+# Build directories (Qt Creator, qmake, CMake)
+build*/
+Build*/
+out/
+bin/
+obj/
+release/
+debug/
+
+# Qt Creator user-specific files
+*.pro.user
+*.pro.user.*
+*.qbs.user
+*.qbs.user.*
+*.qmlproject.user
+*.qmlproject.user.*
+
+# Qt intermediate generated files
+moc_*.cpp
+qrc_*.cpp
+ui_*.h
+*.moc
+
+# Qt project autosave
+*.autosave
+
+# Temporary Qt files
+*.qmlc
+*.jsc
+*.cache
+*.qmake.stash
+
+# Qt installer framework
+*.pkg
+*.dat
+*.qs
+*.qtifws
+
+# ========================
+# IDE Specific (optional)
+# ========================
+
+# Visual Studio / VS Code
+.vscode/
+*.tlog
+*.log
+*.idb
+*.ipch
+*.aps
+*.ncb
+*.sdf
+*.opendb
+*.VC.db
+*.VC.opendb
+
+# Qt Creator
+*.creator
+*.creator.user
+*.creator.user.*
+
+# Mac / Windows junk files
+.DS_Store
+Thumbs.db
