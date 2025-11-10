@@ -27,38 +27,38 @@
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_2">
-          <item>
+          <item alignment="Qt::AlignmentFlag::AlignHCenter">
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>TextLabel</string>
+             <string>Controles</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_2">
+           <widget class="QPushButton" name="btnSaveStop">
             <property name="text">
-             <string>PushButton</string>
+             <string>Registrar Parada</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_3">
+           <widget class="QPushButton" name="btnDeleteStop">
             <property name="text">
-             <string>PushButton</string>
+             <string>Eliminar Parada</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_4">
+           <widget class="QPushButton" name="btnAddBlock">
             <property name="text">
-             <string>PushButton</string>
+             <string>Añadir Bloqueo</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="btnAddAccident">
             <property name="text">
-             <string>PushButton</string>
+             <string>Añadir Accidente</string>
             </property>
            </widget>
           </item>
@@ -67,7 +67,7 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
-           <widget class="QGraphicsView" name="graphicsView"/>
+           <widget class="QGraphicsView" name="mapRoute"/>
           </item>
          </layout>
         </item>
@@ -80,7 +80,7 @@
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
+          <item alignment="Qt::AlignmentFlag::AlignHCenter">
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>Seleccionar Algoritmo</string>
@@ -91,7 +91,7 @@
            <widget class="QComboBox" name="comboBox"/>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_5">
+           <widget class="QPushButton" name="btnExecuteAlg">
             <property name="text">
              <string>Ejecutar Algoritmo</string>
             </property>
@@ -113,14 +113,21 @@
              <item>
               <layout class="QVBoxLayout" name="verticalLayout_8">
                <item>
-                <widget class="QPushButton" name="pushButton_6">
+                <widget class="QLabel" name="resultsLbl">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnExportResults">
                  <property name="text">
                   <string>Exportar Resultados</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton_7">
+                <widget class="QPushButton" name="btnSaveResults">
                  <property name="text">
                   <string>Guardar Resultados</string>
                  </property>
@@ -134,18 +141,31 @@
          </layout>
         </item>
         <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Policy::Preferred</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
          <layout class="QVBoxLayout" name="verticalLayout_7">
-          <item>
-           <widget class="QGraphicsView" name="graphicsView_2"/>
-          </item>
           <item>
            <widget class="QGroupBox" name="groupBox_2">
             <property name="title">
-             <string>Resultados De Los Algoritmos</string>
+             <string>Mapa</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_10">
              <item>
-              <widget class="QTextEdit" name="textEdit"/>
+              <widget class="QGraphicsView" name="mapAlg"/>
              </item>
             </layout>
            </widget>
