@@ -1,4 +1,6 @@
 <RCC>
     <qresource prefix="MainWindow">
+        <file>assets/Map.jpg</file>
+        <file>assets/rotom.png</file>
     </qresource>
 </RCC>

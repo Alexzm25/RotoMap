@@ -99,9 +99,21 @@
     <QtRcc Include="MainWindow.qrc"/>
     <QtUic Include="MainWindow.ui"/>
     <QtMoc Include="MainWindow.h"/>
+    <QtMoc Include="GraphScene.h"/>
     <ClCompile Include="MainWindow.cpp"/>
     <ClCompile Include="main.cpp"/>
-
+    <ClCompile Include="Vertex.cpp"/>
+    <ClCompile Include="Edge.cpp"/>
+    <ClCompile Include="Graph.cpp"/>
+    <ClCompile Include="GraphAlgorithms.cpp"/>
+    <ClCompile Include="FileManager.cpp"/>
+    <ClCompile Include="GraphScene.cpp"/>
+    <ClInclude Include="Vertex.h"/>
+    <ClInclude Include="Edge.h"/>
+    <ClInclude Include="Graph.h"/>
+    <ClInclude Include="PathResult.h"/>
+    <ClInclude Include="GraphAlgorithms.h"/>
+    <ClInclude Include="FileManager.h"/>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
