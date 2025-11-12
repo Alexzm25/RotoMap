@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QTextStream>
+#include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), m_graph(new Graph()), m_currentAction("none")
@@ -31,29 +32,46 @@ void MainWindow::setupScenes()
     m_routeScene->setGraph(m_graph);
     m_algScene->setGraph(m_graph);
     
-    QSize viewSize(800, 600);
-    
-    m_routeScene->setBackgroundImage(":/MainWindow/assets/Map.jpg", viewSize);
-    m_algScene->setBackgroundImage(":/MainWindow/assets/Map.jpg", viewSize);
-    
     ui.mapRoute->setScene(m_routeScene);
     ui.mapAlg->setScene(m_algScene);
     
     ui.mapRoute->setRenderHint(QPainter::Antialiasing);
     ui.mapAlg->setRenderHint(QPainter::Antialiasing);
+    ui.mapRoute->setRenderHint(QPainter::SmoothPixmapTransform);
+    ui.mapAlg->setRenderHint(QPainter::SmoothPixmapTransform);
     
     ui.mapRoute->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui.mapRoute->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui.mapAlg->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui.mapAlg->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     
-    ui.mapRoute->setFixedSize(viewSize);
-    ui.mapAlg->setFixedSize(viewSize);
+    ui.mapRoute->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+    ui.mapAlg->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+    
+    ui.mapRoute->setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing, false);
+    ui.mapAlg->setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing, false);
     
     ui.comboBox->addItem("Dijkstra (Camino más corto)");
     ui.comboBox->addItem("Floyd-Warshall (Camino más corto)");
     ui.comboBox->addItem("Prim (Árbol de expansión mínima)");
     ui.comboBox->addItem("Kruskal (Árbol de expansión mínima)");
+    
+    QTimer::singleShot(200, this, [this]() {
+        QSize routeViewSize = ui.mapRoute->viewport()->size();
+        QSize algViewSize = ui.mapAlg->viewport()->size();
+        
+        m_routeScene->setBackgroundImage(":/MainWindow/assets/Map.jpg", routeViewSize);
+        m_algScene->setBackgroundImage(":/MainWindow/assets/Map.jpg", algViewSize);
+        
+        ui.mapRoute->resetTransform();
+        ui.mapAlg->resetTransform();
+        
+        ui.mapRoute->fitInView(m_routeScene->sceneRect(), Qt::IgnoreAspectRatio);
+        ui.mapAlg->fitInView(m_algScene->sceneRect(), Qt::IgnoreAspectRatio);
+        
+        ui.mapRoute->update();
+        ui.mapAlg->update();
+    });
 }
 
 void MainWindow::connectSignals()
@@ -71,6 +89,8 @@ void MainWindow::connectSignals()
     connect(m_routeScene, &GraphScene::vertexClicked, this, &MainWindow::onVertexClicked);
     connect(m_routeScene, &GraphScene::edgeClicked, this, &MainWindow::onEdgeClicked);
     connect(m_routeScene, &GraphScene::emptySpaceClicked, this, &MainWindow::onEmptySpaceClicked);
+    
+    connect(ui.mainTabs, &QTabWidget::currentChanged, this, &MainWindow::onTabChanged);
 }
 
 void MainWindow::onLoadRoutes()
@@ -444,5 +464,52 @@ void MainWindow::resetAction()
     m_selectedVertex2.clear();
     m_routeScene->setClickMode("none");
     ui.statusBar->clearMessage();
+}
+
+void MainWindow::showEvent(QShowEvent* event)
+{
+    QMainWindow::showEvent(event);
+    QTimer::singleShot(50, this, [this]() {
+        ui.mapRoute->fitInView(m_routeScene->sceneRect(), Qt::IgnoreAspectRatio);
+        ui.mapAlg->fitInView(m_algScene->sceneRect(), Qt::IgnoreAspectRatio);
+    });
+}
+
+void MainWindow::resizeEvent(QResizeEvent* event)
+{
+    QMainWindow::resizeEvent(event);
+    if (m_routeScene && m_algScene)
+    {
+        QTimer::singleShot(50, this, [this]() {
+            ui.mapRoute->fitInView(m_routeScene->sceneRect(), Qt::IgnoreAspectRatio);
+            ui.mapAlg->fitInView(m_algScene->sceneRect(), Qt::IgnoreAspectRatio);
+        });
+    }
+}
+
+void MainWindow::onTabChanged(int index)
+{
+    QTimer::singleShot(50, this, [this, index]() {
+        if (index == 0)
+        {
+            QSize routeViewSize = ui.mapRoute->viewport()->size();
+            if (routeViewSize.width() > 0 && routeViewSize.height() > 0)
+            {
+                ui.mapRoute->resetTransform();
+                ui.mapRoute->fitInView(m_routeScene->sceneRect(), Qt::IgnoreAspectRatio);
+                ui.mapRoute->update();
+            }
+        }
+        else if (index == 1)
+        {
+            QSize algViewSize = ui.mapAlg->viewport()->size();
+            if (algViewSize.width() > 0 && algViewSize.height() > 0)
+            {
+                ui.mapAlg->resetTransform();
+                ui.mapAlg->fitInView(m_algScene->sceneRect(), Qt::IgnoreAspectRatio);
+                ui.mapAlg->update();
+            }
+        }
+    });
 }
 

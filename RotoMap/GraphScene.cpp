@@ -55,7 +55,7 @@ QString GraphScene::getClickedVertex(const QPointF& pos)
     {
         QPointF vPos = getScaledPosition(vertex->getPosition());
         double distance = QLineF(vPos, pos).length();
-        if (distance < 20)
+        if (distance < 30)
         {
             return vertex->getName();
         }
@@ -133,16 +133,16 @@ void GraphScene::drawVertex(Vertex* vertex)
 {
     QPointF pos = getScaledPosition(vertex->getPosition());
     
-    QGraphicsEllipseItem* circle = addEllipse(pos.x() - 15, pos.y() - 15, 30, 30,
-                                              QPen(Qt::black, 2), QBrush(QColor(100, 150, 255)));
+    QGraphicsEllipseItem* circle = addEllipse(pos.x() - 25, pos.y() - 25, 50, 50,
+                                              QPen(Qt::black, 3), QBrush(QColor(100, 150, 255)));
     m_graphItems.append(circle);
     
     QGraphicsTextItem* text = addText(vertex->getName());
-    text->setPos(pos.x() - text->boundingRect().width() / 2, pos.y() - 8);
+    text->setPos(pos.x() - text->boundingRect().width() / 2, pos.y() - text->boundingRect().height() / 2);
     text->setDefaultTextColor(Qt::white);
     QFont font = text->font();
     font.setBold(true);
-    font.setPointSize(10);
+    font.setPointSize(14);
     text->setFont(font);
     m_graphItems.append(text);
 }
@@ -182,12 +182,44 @@ void GraphScene::drawEdge(Edge* edge)
     
     QPointF midPoint = (p1 + p2) / 2.0;
     QGraphicsTextItem* weightText = addText(QString::number(edge->getWeight(), 'f', 1));
+    
+    QFont font = weightText->font();
+    font.setBold(true);
+    font.setPointSize(14);
+    weightText->setFont(font);
+    
+    weightText->setDefaultTextColor(Qt::yellow);
+    
+    QPen outlinePen(Qt::black);
+    outlinePen.setWidth(3);
+    
+    QGraphicsTextItem* outline = addText(QString::number(edge->getWeight(), 'f', 1));
+    outline->setFont(font);
+    outline->setDefaultTextColor(Qt::black);
+    outline->setPos(midPoint.x() - outline->boundingRect().width() / 2,
+                   midPoint.y() - outline->boundingRect().height() / 2);
+    outline->setZValue(5);
+    m_graphItems.append(outline);
+    
+    for (int dx = -1; dx <= 1; ++dx)
+    {
+        for (int dy = -1; dy <= 1; ++dy)
+        {
+            if (dx == 0 && dy == 0) continue;
+            
+            QGraphicsTextItem* shadow = addText(QString::number(edge->getWeight(), 'f', 1));
+            shadow->setFont(font);
+            shadow->setDefaultTextColor(Qt::black);
+            shadow->setPos(midPoint.x() - shadow->boundingRect().width() / 2 + dx,
+                          midPoint.y() - shadow->boundingRect().height() / 2 + dy);
+            shadow->setZValue(5);
+            m_graphItems.append(shadow);
+        }
+    }
+    
     weightText->setPos(midPoint.x() - weightText->boundingRect().width() / 2,
                       midPoint.y() - weightText->boundingRect().height() / 2);
-    
-    QGraphicsRectItem* bg = addRect(weightText->boundingRect().translated(weightText->pos()),
-                                    QPen(Qt::NoPen), QBrush(QColor(255, 255, 255, 200)));
-    m_graphItems.append(bg);
+    weightText->setZValue(6);
     m_graphItems.append(weightText);
 }
 
@@ -264,10 +296,11 @@ void GraphScene::setBackgroundImage(const QString& imagePath, const QSize& viewS
     QPixmap pixmap(imagePath);
     if (!pixmap.isNull())
     {
-        QPixmap scaledPixmap = pixmap.scaled(viewSize, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-        m_backgroundItem = addPixmap(scaledPixmap);
+        m_backgroundItem = addPixmap(pixmap);
         m_backgroundItem->setZValue(-1);
-        setSceneRect(0, 0, viewSize.width(), viewSize.height());
+        m_backgroundItem->setPos(0, 0);
+        m_backgroundItem->setTransformationMode(Qt::SmoothTransformation);
+        setSceneRect(0, 0, pixmap.width(), pixmap.height());
     }
 }
 

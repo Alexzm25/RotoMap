@@ -26,6 +26,11 @@ private slots:
     void onVertexClicked(const QString& vertexName);
     void onEdgeClicked(Edge* edge);
     void onEmptySpaceClicked(const QPointF& position);
+    void onTabChanged(int index);
+
+protected:
+    void showEvent(QShowEvent* event) override;
+    void resizeEvent(QResizeEvent* event) override;
 
 private:
     Ui::MainWindowClass ui;
