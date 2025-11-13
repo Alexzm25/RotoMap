@@ -229,7 +229,12 @@ void GraphScene::drawEdge(Edge* edge)
     m_graphItems.append(line);
     
     QPointF midPoint = (p1 + p2) / 2.0;
-    QString weightText = QString::number(edge->getWeight(), 'f', 1) + " km";
+    double displayWeight = edge->getWeight();
+    if (edge->getStatus() == EdgeStatus::Accident)
+    {
+        displayWeight = edge->getWeight() * 1.333;
+    }
+    QString weightText = QString::number(displayWeight, 'f', 0) + " m";
     
     if (edge->getStatus() == EdgeStatus::Accident && !m_accidentSign.isNull())
     {

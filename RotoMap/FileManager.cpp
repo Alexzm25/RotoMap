@@ -14,12 +14,16 @@ bool FileManager::loadGraph(const QString& filename, Graph* graph)
     QTextStream in(&file);
     
     QString line = in.readLine();
-    if (line.startsWith("VERTICES"))
+    if (line.startsWith("ESTACIONES"))
     {
         while (!in.atEnd())
         {
             line = in.readLine().trimmed();
-            if (line.isEmpty() || line.startsWith("EDGES"))
+            if (line.isEmpty())
+            {
+                continue;
+            }
+            if (line.startsWith("CONEXIONES"))
             {
                 break;
             }
@@ -35,7 +39,7 @@ bool FileManager::loadGraph(const QString& filename, Graph* graph)
         }
     }
     
-    if (line.startsWith("EDGES"))
+    if (line.startsWith("CONEXIONES"))
     {
         while (!in.atEnd())
         {
@@ -59,11 +63,11 @@ bool FileManager::loadGraph(const QString& filename, Graph* graph)
                     Edge* edge = graph->getEdge(from, to);
                     if (edge)
                     {
-                        if (status == "blocked")
+                        if (status == "bloqueado")
                         {
                             edge->setStatus(EdgeStatus::Blocked);
                         }
-                        else if (status == "accident")
+                        else if (status == "accidente")
                         {
                             edge->setStatus(EdgeStatus::Accident);
                         }
@@ -87,7 +91,7 @@ bool FileManager::saveGraph(const QString& filename, Graph* graph)
     
     QTextStream out(&file);
     
-    out << "VERTICES\n";
+    out << "ESTACIONES\n";
     for (Vertex* vertex : graph->getVertices())
     {
         out << vertex->getName() << ", "
@@ -95,7 +99,7 @@ bool FileManager::saveGraph(const QString& filename, Graph* graph)
             << vertex->getPosition().y() << "\n";
     }
     
-    out << "\nEDGES\n";
+    out << "\nCONEXIONES\n";
     for (Edge* edge : graph->getEdges())
     {
         out << edge->getFrom() << ", "
@@ -104,11 +108,11 @@ bool FileManager::saveGraph(const QString& filename, Graph* graph)
         
         if (edge->getStatus() == EdgeStatus::Blocked)
         {
-            out << ", blocked";
+            out << ", bloqueado";
         }
         else if (edge->getStatus() == EdgeStatus::Accident)
         {
-            out << ", accident";
+            out << ", accidente";
         }
         
         out << "\n";

@@ -86,7 +86,7 @@ void MainWindow::connectSignals()
     connect(ui.btnAddBlock, &QPushButton::clicked, this, &MainWindow::onAddBlock);
     connect(ui.btnAddAccident, &QPushButton::clicked, this, &MainWindow::onAddAccident);
     connect(ui.btnExecuteAlg, &QPushButton::clicked, this, &MainWindow::onExecuteAlgorithm);
-    connect(ui.btnExportResults, &QPushButton::clicked, this, &MainWindow::onExportResults);
+    connect(ui.btnLinkRoute, &QPushButton::clicked, this, &MainWindow::onLinkRoute);
     connect(ui.btnSaveResults, &QPushButton::clicked, this, &MainWindow::onSaveResults);
     
     connect(m_routeScene, &GraphScene::vertexClicked, this, &MainWindow::onVertexClicked);
@@ -125,7 +125,7 @@ void MainWindow::onLoadRoutes()
 
 void MainWindow::onSaveRoutes()
 {
-    QString filename = QFileDialog::getSaveFileName(this, "Guardar Rutas", "", "Text Files (*.txt)");
+    QString filename = QFileDialog::getSaveFileName(this, "Guardar Rutas", "rutas.txt", "Text Files (*.txt)");
     if (filename.isEmpty())
     {
         return;
@@ -156,6 +156,13 @@ void MainWindow::onSaveStop()
     ui.statusBar->showMessage("Haga clic en el mapa para colocar la nueva parada");
 }
 
+void MainWindow::onLinkRoute()
+{
+    m_currentAction = "selectForEdge";
+    m_routeScene->setClickMode("selectForEdge");
+    ui.statusBar->showMessage("Seleccione la primera parada para conectar");
+}
+
 void MainWindow::onVertexClicked(const QString& vertexName)
 {
     if (m_currentAction == "deleteVertex")
@@ -177,11 +184,11 @@ void MainWindow::onVertexClicked(const QString& vertexName)
             m_selectedVertex2 = vertexName;
             
             QInputDialog dialog(this);
-            dialog.setWindowTitle("RotoMap - Peso de Arista");
-            dialog.setLabelText(QString("Distancia entre %1 y %2 (km):").arg(m_selectedVertex1, m_selectedVertex2));
+            dialog.setWindowTitle("RotoMap - Tiempo de Ruta");
+            dialog.setLabelText(QString("Tiempo entre %1 y %2 (minutos):").arg(m_selectedVertex1, m_selectedVertex2));
             dialog.setDoubleValue(0);
             dialog.setDoubleRange(0, 10000);
-            dialog.setDoubleDecimals(1);
+            dialog.setDoubleDecimals(0);
             dialog.resize(450, 150);
             bool ok = dialog.exec();
             double weight = dialog.doubleValue();
@@ -420,7 +427,7 @@ void MainWindow::onExecuteAlgorithm()
                 resultText += vertex + " → ";
             }
             resultText.chop(3);
-            resultText += QString("\n\nDistancia total: %1 km").arg(result.totalDistance, 0, 'f', 2);
+            resultText += QString("\n\nTiempo total: %1 minutos").arg(result.totalDistance, 0, 'f', 0);
             
             ui.resultsText->setPlainText(resultText);
             m_lastResult = resultText;
@@ -460,52 +467,10 @@ void MainWindow::onExecuteAlgorithm()
         {
             resultText += QString("%1 ↔ %2\n").arg(edge.first, edge.second);
         }
-        resultText += QString("\nPeso total: %1 km").arg(result.totalWeight, 0, 'f', 2);
+        resultText += QString("\nTiempo total: %1 minutos").arg(result.totalWeight, 0, 'f', 0);
         
         ui.resultsText->setPlainText(resultText);
         m_lastResult = resultText;
-    }
-}
-
-void MainWindow::onExportResults()
-{
-    if (m_lastResult.isEmpty())
-    {
-        QMessageBox msgBox(this);
-        msgBox.setWindowTitle("RotoMap - Advertencia");
-        msgBox.setText("No hay resultados para exportar");
-        msgBox.setIcon(QMessageBox::Warning);
-        msgBox.exec();
-        return;
-    }
-    
-    QString filename = QFileDialog::getSaveFileName(this, "Exportar Resultados", 
-                                                    "", "Text Files (*.txt)");
-    if (filename.isEmpty())
-    {
-        return;
-    }
-    
-    QFile file(filename);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-        QTextStream out(&file);
-        out << m_lastResult;
-        file.close();
-        
-        QMessageBox msgBox(this);
-        msgBox.setWindowTitle("RotoMap - Éxito");
-        msgBox.setText("Resultados exportados correctamente");
-        msgBox.setIcon(QMessageBox::Information);
-        msgBox.exec();
-    }
-    else
-    {
-        QMessageBox msgBox(this);
-        msgBox.setWindowTitle("RotoMap - Error");
-        msgBox.setText("No se pudo exportar el archivo");
-        msgBox.setIcon(QMessageBox::Critical);
-        msgBox.exec();
     }
 }
 
@@ -522,7 +487,7 @@ void MainWindow::onSaveResults()
     }
     
     QString filename = QFileDialog::getSaveFileName(this, "Guardar Resultados", 
-                                                    "", "Text Files (*.txt)");
+                                                    "resultados.txt", "Text Files (*.txt)");
     if (filename.isEmpty())
     {
         return;

@@ -22,7 +22,7 @@ private slots:
     void onAddBlock();
     void onAddAccident();
     void onExecuteAlgorithm();
-    void onExportResults();
+    void onLinkRoute();
     void onSaveResults();
     void onVertexClicked(const QString& vertexName);
     void onEdgeClicked(Edge* edge);
