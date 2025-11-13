@@ -29,64 +29,64 @@
     <QtUic Include="MainWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtMoc Include="MainWindow.h">
+    <QtMoc Include="header\MainWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <ClCompile Include="MainWindow.cpp">
+    <ClCompile Include="source\MainWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Vertex.cpp">
+    <ClCompile Include="source\Vertex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Edge.cpp">
+    <ClCompile Include="source\Edge.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Graph.cpp">
+    <ClCompile Include="source\Graph.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GraphAlgorithms.cpp">
+    <ClCompile Include="source\GraphAlgorithms.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileManager.cpp">
+    <ClCompile Include="source\FileManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GraphScene.cpp">
+    <ClCompile Include="source\GraphScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StyleSheetManager.cpp">
+    <ClCompile Include="source\StyleSheetManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Vertex.h">
+    <ClInclude Include="header\Vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Edge.h">
+    <ClInclude Include="header\Edge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Graph.h">
+    <ClInclude Include="header\Graph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PathResult.h">
+    <ClInclude Include="header\PathResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GraphAlgorithms.h">
+    <ClInclude Include="header\GraphAlgorithms.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FileManager.h">
+    <ClInclude Include="header\FileManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StyleSheetManager.h">
+    <ClInclude Include="header\StyleSheetManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="GraphScene.h">
+    <QtMoc Include="header\GraphScene.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

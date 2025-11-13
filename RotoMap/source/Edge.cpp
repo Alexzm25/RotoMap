@@ -1,4 +1,4 @@
-#include "Edge.h"
+#include "../header/Edge.h"
 
 Edge::Edge(const QString& from, const QString& to, double weight)
     : m_from(from), m_to(to), m_weight(weight), m_status(EdgeStatus::Normal)

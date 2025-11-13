@@ -1,6 +1,6 @@
-#include "MainWindow.h"
-#include "FileManager.h"
-#include "GraphAlgorithms.h"
+#include "../header/MainWindow.h"
+#include "../header/FileManager.h"
+#include "../header/GraphAlgorithms.h"
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QInputDialog>

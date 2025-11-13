@@ -1,4 +1,4 @@
-#include "GraphScene.h"
+#include "../header/GraphScene.h"
 #include <QGraphicsEllipseItem>
 #include <QGraphicsLineItem>
 #include <QGraphicsTextItem>

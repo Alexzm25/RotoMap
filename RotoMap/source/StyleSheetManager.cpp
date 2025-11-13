@@ -1,4 +1,4 @@
-#include "StyleSheetManager.h"
+#include "../header/StyleSheetManager.h"
 
 QString StyleSheetManager::getRotoMapStyleSheet()
 {

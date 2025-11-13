@@ -1,4 +1,4 @@
-#include "GraphAlgorithms.h"
+#include "../header/GraphAlgorithms.h"
 #include <QSet>
 #include <limits>
 #include <algorithm>

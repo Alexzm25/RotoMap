@@ -1,4 +1,4 @@
-#include "FileManager.h"
+#include "../header/FileManager.h"
 #include <QFile>
 #include <QTextStream>
 

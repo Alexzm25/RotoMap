@@ -1,4 +1,4 @@
-#include "Vertex.h"
+#include "../header/Vertex.h"
 
 Vertex::Vertex(const QString& name, const QPointF& position)
     : m_name(name), m_position(position)
