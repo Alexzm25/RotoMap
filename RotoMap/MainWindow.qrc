@@ -5,5 +5,6 @@
         <file>assets/PokeStop.png</file>
         <file>assets/AccidentSign.png</file>
         <file>assets/BlockSign.png</file>
+        <file>assets/RotomDialog.png</file>
     </qresource>
 </RCC>

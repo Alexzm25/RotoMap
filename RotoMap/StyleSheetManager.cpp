@@ -408,5 +408,15 @@ QString StyleSheetManager::getRotoMapStyleSheet()
         Line {
             background: #00D9FF;
         }
+        
+        #rotomLbl {
+            background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+                stop:0 #00D9FF, stop:0.3 #7FDBFF, stop:0.7 #ffffff, stop:1 #00D9FF);
+            border: 3px solid;
+            border-radius: 12px;
+            border-color: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                stop:0 #00D9FF, stop:0.5 #7FDBFF, stop:1 #00D9FF);
+            padding: 4px;
+        }
     )";
 }

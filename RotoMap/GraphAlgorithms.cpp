@@ -66,7 +66,7 @@ PathResult GraphAlgorithms::dijkstra(Graph* graph, const QString& start, const Q
             double weight = edge->getWeight();
             if (edge->getStatus() == EdgeStatus::Accident)
             {
-                weight *= 1.5;
+                weight *= 1.333;
             }
             
             double newDistance = distances[current] + weight;
@@ -135,7 +135,7 @@ PathResult GraphAlgorithms::floydWarshall(Graph* graph, const QString& start, co
         
         if (edge->getStatus() == EdgeStatus::Accident)
         {
-            weight *= 1.5;
+            weight *= 1.333;
         }
         
         if (weight < dist[u][v])
@@ -217,7 +217,7 @@ TreeResult GraphAlgorithms::prim(Graph* graph)
                 double weight = edge->getWeight();
                 if (edge->getStatus() == EdgeStatus::Accident)
                 {
-                    weight *= 1.5;
+                    weight *= 1.333;
                 }
                 
                 if (weight < minWeight)
@@ -265,7 +265,7 @@ TreeResult GraphAlgorithms::kruskal(Graph* graph)
         double weight = edge->getWeight();
         if (edge->getStatus() == EdgeStatus::Accident)
         {
-            weight *= 1.5;
+            weight *= 1.333;
         }
         
         sortedEdges.append(qMakePair(weight, edge));

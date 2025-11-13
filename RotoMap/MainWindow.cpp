@@ -54,10 +54,10 @@ void MainWindow::setupScenes()
     ui.mapRoute->setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing, false);
     ui.mapAlg->setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing, false);
     
-    ui.comboBox->addItem("Dijkstra (Camino más corto)");
-    ui.comboBox->addItem("Floyd-Warshall (Camino más corto)");
-    ui.comboBox->addItem("Prim (Árbol de expansión mínima)");
-    ui.comboBox->addItem("Kruskal (Árbol de expansión mínima)");
+    ui.comboBox->addItem("Dijkstra");
+    ui.comboBox->addItem("Floyd-Warshall");
+    ui.comboBox->addItem("Prim");
+    ui.comboBox->addItem("Kruskal");
     
     QTimer::singleShot(200, this, [this]() {
         QSize routeViewSize = ui.mapRoute->viewport()->size();
@@ -291,8 +291,8 @@ void MainWindow::onEmptySpaceClicked(const QPointF& position)
             QMessageBox msgBox(this);
             msgBox.setWindowTitle("RotoMap - Conectar Parada");
             msgBox.setText("¿Desea conectar esta parada con otra?");
-            msgBox.setIcon(QMessageBox::Question);
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+            msgBox.setDefaultButton(QMessageBox::Yes);
             auto reply = msgBox.exec();
             
             if (reply == QMessageBox::Yes)

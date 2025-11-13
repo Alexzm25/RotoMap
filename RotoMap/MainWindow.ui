@@ -104,6 +104,32 @@
              </property>
             </spacer>
            </item>
+           <item>
+            <layout class="QVBoxLayout" name="vBoxRotom">
+             <item>
+              <widget class="QLabel" name="rotomLbl">
+               <property name="maximumSize">
+                <size>
+                 <width>170</width>
+                 <height>150</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="pixmap">
+                <pixmap>assets/RotomDialog.png</pixmap>
+               </property>
+               <property name="scaledContents">
+                <bool>true</bool>
+               </property>
+               <property name="indent">
+                <number>-1</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
           </layout>
          </widget>
         </item>
