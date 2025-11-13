@@ -46,7 +46,8 @@ void Graph::removeEdge(const QString& from, const QString& to)
 {
     for (int i = 0; i < m_edges.size(); ++i)
     {
-        if (m_edges[i]->getFrom() == from && m_edges[i]->getTo() == to)
+        if ((m_edges[i]->getFrom() == from && m_edges[i]->getTo() == to) ||
+            (m_edges[i]->getFrom() == to && m_edges[i]->getTo() == from))
         {
             delete m_edges[i];
             m_edges.removeAt(i);
@@ -92,7 +93,8 @@ Edge* Graph::getEdge(const QString& from, const QString& to) const
 {
     for (Edge* edge : m_edges)
     {
-        if (edge->getFrom() == from && edge->getTo() == to)
+        if ((edge->getFrom() == from && edge->getTo() == to) ||
+            (edge->getFrom() == to && edge->getTo() == from))
         {
             return edge;
         }

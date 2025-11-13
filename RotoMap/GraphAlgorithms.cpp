@@ -58,6 +58,11 @@ PathResult GraphAlgorithms::dijkstra(Graph* graph, const QString& start, const Q
             
             QString neighbor = (edge->getFrom() == current) ? edge->getTo() : edge->getFrom();
             
+            if (visited.contains(neighbor))
+            {
+                continue;
+            }
+            
             double weight = edge->getWeight();
             if (edge->getStatus() == EdgeStatus::Accident)
             {
@@ -133,10 +138,13 @@ PathResult GraphAlgorithms::floydWarshall(Graph* graph, const QString& start, co
             weight *= 1.5;
         }
         
-        dist[u][v] = weight;
-        dist[v][u] = weight;
-        next[u][v] = v;
-        next[v][u] = u;
+        if (weight < dist[u][v])
+        {
+            dist[u][v] = weight;
+            dist[v][u] = weight;
+            next[u][v] = v;
+            next[v][u] = u;
+        }
     }
     
     for (int k = 0; k < n; ++k)
