@@ -17,6 +17,7 @@ struct TreeResult
 {
     QVector<QPair<QString, QString>> edges;
     double totalWeight;
+    QString root;
     
     TreeResult() : totalWeight(0.0) {}
 };

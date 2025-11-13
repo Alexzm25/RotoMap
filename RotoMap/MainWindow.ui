@@ -185,6 +185,19 @@
             </widget>
            </item>
            <item>
+            <widget class="QPushButton" name="btnTraverseTree">
+             <property name="toolTip">
+              <string>Recorre el árbol generado (solo disponible después de Prim o Kruskal)</string>
+             </property>
+             <property name="text">
+              <string>Recorrer Árbol</string>
+             </property>
+             <property name="visible">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="Line" name="line">
              <property name="orientation">
               <enum>Qt::Orientation::Horizontal</enum>
@@ -198,7 +211,11 @@
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_9">
               <item>
-               <widget class="QTextEdit" name="resultsText"/>
+               <widget class="QTextEdit" name="resultsText">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
               </item>
               <item>
                <widget class="QPushButton" name="btnSaveResults">

@@ -5,6 +5,7 @@
 #include "Graph.h"
 #include "GraphScene.h"
 #include "StyleSheetManager.h"
+#include "PathResult.h"
 
 class MainWindow : public QMainWindow
 {
@@ -22,6 +23,7 @@ private slots:
     void onAddBlock();
     void onAddAccident();
     void onExecuteAlgorithm();
+    void onTraverseTree();
     void onLinkRoute();
     void onSaveResults();
     void onVertexClicked(const QString& vertexName);
@@ -42,10 +44,17 @@ private:
     QString m_currentAction;
     QString m_selectedVertex1;
     QString m_selectedVertex2;
+    TreeResult m_lastTree;
+    bool m_hasTree;
     
     void setupScenes();
     void connectSignals();
     void updateScenes();
     void resetAction();
+    
+    QString preorderTraversal(const QString& root, const QMap<QString, QVector<QString>>& adjacencyList, QSet<QString>& visited);
+    QString inorderTraversal(const QString& root, const QMap<QString, QVector<QString>>& adjacencyList, QSet<QString>& visited);
+    QString postorderTraversal(const QString& root, const QMap<QString, QVector<QString>>& adjacencyList, QSet<QString>& visited);
+    QMap<QString, QVector<QString>> buildAdjacencyList(const TreeResult& tree);
 };
 

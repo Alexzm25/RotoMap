@@ -2,9 +2,9 @@
     <qresource prefix="MainWindow">
         <file>assets/Map.jpg</file>
         <file>assets/RotomIcon.png</file>
+        <file>assets/RotomDialog.png</file>
         <file>assets/PokeStop.png</file>
         <file>assets/AccidentSign.png</file>
         <file>assets/BlockSign.png</file>
-        <file>assets/RotomDialog.png</file>
     </qresource>
 </RCC>

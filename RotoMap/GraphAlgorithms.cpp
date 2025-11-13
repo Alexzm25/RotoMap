@@ -195,6 +195,8 @@ TreeResult GraphAlgorithms::prim(Graph* graph)
     QSet<QString> visited;
     QVector<Vertex*> vertices = graph->getVertices();
     
+    result.root = vertices[0]->getName();
+    
     visited.insert(vertices[0]->getName());
     
     while (visited.size() < vertices.size())
@@ -254,6 +256,12 @@ TreeResult GraphAlgorithms::kruskal(Graph* graph)
     
     QVector<Edge*> edges = graph->getEdges();
     QVector<QPair<double, Edge*>> sortedEdges;
+    
+    QVector<Vertex*> vertices = graph->getVertices();
+    if (!vertices.isEmpty())
+    {
+        result.root = vertices[0]->getName();
+    }
     
     for (Edge* edge : edges)
     {

@@ -8,7 +8,7 @@
 #include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), m_graph(new Graph()), m_currentAction("none")
+    : QMainWindow(parent), m_graph(new Graph()), m_currentAction("none"), m_hasTree(false)
 {
     ui.setupUi(this);
 
@@ -86,6 +86,7 @@ void MainWindow::connectSignals()
     connect(ui.btnAddBlock, &QPushButton::clicked, this, &MainWindow::onAddBlock);
     connect(ui.btnAddAccident, &QPushButton::clicked, this, &MainWindow::onAddAccident);
     connect(ui.btnExecuteAlg, &QPushButton::clicked, this, &MainWindow::onExecuteAlgorithm);
+    connect(ui.btnTraverseTree, &QPushButton::clicked, this, &MainWindow::onTraverseTree);
     connect(ui.btnLinkRoute, &QPushButton::clicked, this, &MainWindow::onLinkRoute);
     connect(ui.btnSaveResults, &QPushButton::clicked, this, &MainWindow::onSaveResults);
     
@@ -377,6 +378,8 @@ void MainWindow::onExecuteAlgorithm()
     
     if (algIndex < 2)
     {
+        ui.btnTraverseTree->setVisible(false);
+        m_hasTree = false;
         QStringList vertices;
         for (Vertex* v : m_graph->getVertices())
         {
@@ -457,6 +460,10 @@ void MainWindow::onExecuteAlgorithm()
             result = GraphAlgorithms::kruskal(m_graph);
             algName = "Kruskal";
         }
+        
+        m_lastTree = result;
+        m_hasTree = true;
+        ui.btnTraverseTree->setVisible(true);
         
         QColor treeColor = (algIndex == 2) ? QColor(255, 0, 255) : QColor(255, 200, 0);
         m_algScene->highlightTree(result.edges, treeColor);
@@ -578,5 +585,168 @@ void MainWindow::onTabChanged(int index)
             }
         }
     });
+}
+
+void MainWindow::onTraverseTree()
+{
+    if (!m_hasTree)
+    {
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("RotoMap - Advertencia");
+        msgBox.setText("No hay árbol para recorrer. Ejecute Prim o Kruskal primero.");
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.exec();
+        return;
+    }
+    
+    QStringList traversalOptions;
+    traversalOptions << "Preorden" << "Inorden" << "Postorden";
+    
+    QInputDialog dialog(this);
+    dialog.setWindowTitle("RotoMap - Tipo de Recorrido");
+    dialog.setLabelText("Seleccione el tipo de recorrido:");
+    dialog.setComboBoxItems(traversalOptions);
+    dialog.resize(400, 150);
+    
+    if (!dialog.exec())
+    {
+        return;
+    }
+    
+    QString selectedTraversal = dialog.textValue();
+    
+    QMap<QString, QVector<QString>> adjacencyList = buildAdjacencyList(m_lastTree);
+    QSet<QString> visited;
+    QString traversalResult;
+    
+    if (selectedTraversal == "Preorden")
+    {
+        traversalResult = preorderTraversal(m_lastTree.root, adjacencyList, visited);
+    }
+    else if (selectedTraversal == "Inorden")
+    {
+        traversalResult = inorderTraversal(m_lastTree.root, adjacencyList, visited);
+    }
+    else
+    {
+        traversalResult = postorderTraversal(m_lastTree.root, adjacencyList, visited);
+    }
+    
+    QString resultText = QString("Recorrido %1:\n\n").arg(selectedTraversal);
+    resultText += traversalResult;
+    
+    ui.resultsText->append("\n" + QString(50, '=') + "\n");
+    ui.resultsText->append(resultText);
+}
+
+QMap<QString, QVector<QString>> MainWindow::buildAdjacencyList(const TreeResult& tree)
+{
+    QMap<QString, QVector<QString>> adjacencyList;
+    
+    for (const auto& edge : tree.edges)
+    {
+        adjacencyList[edge.first].append(edge.second);
+        adjacencyList[edge.second].append(edge.first);
+    }
+    
+    return adjacencyList;
+}
+
+QString MainWindow::preorderTraversal(const QString& root, const QMap<QString, QVector<QString>>& adjacencyList, QSet<QString>& visited)
+{
+    QString result;
+    
+    if (visited.contains(root))
+    {
+        return result;
+    }
+    
+    result += root + " → ";
+    visited.insert(root);
+    
+    if (adjacencyList.contains(root))
+    {
+        for (const QString& child : adjacencyList[root])
+        {
+            if (!visited.contains(child))
+            {
+                result += preorderTraversal(child, adjacencyList, visited);
+            }
+        }
+    }
+    
+    return result;
+}
+
+QString MainWindow::inorderTraversal(const QString& root, const QMap<QString, QVector<QString>>& adjacencyList, QSet<QString>& visited)
+{
+    QString result;
+    
+    if (visited.contains(root))
+    {
+        return result;
+    }
+    
+    visited.insert(root);
+    
+    if (adjacencyList.contains(root))
+    {
+        QVector<QString> children = adjacencyList[root];
+        QVector<QString> unvisitedChildren;
+        
+        for (const QString& child : children)
+        {
+            if (!visited.contains(child))
+            {
+                unvisitedChildren.append(child);
+            }
+        }
+        
+        int mid = unvisitedChildren.size() / 2;
+        for (int i = 0; i < mid; ++i)
+        {
+            result += inorderTraversal(unvisitedChildren[i], adjacencyList, visited);
+        }
+        
+        result += root + " → ";
+        
+        for (int i = mid; i < unvisitedChildren.size(); ++i)
+        {
+            result += inorderTraversal(unvisitedChildren[i], adjacencyList, visited);
+        }
+    }
+    else
+    {
+        result += root + " → ";
+    }
+    
+    return result;
+}
+
+QString MainWindow::postorderTraversal(const QString& root, const QMap<QString, QVector<QString>>& adjacencyList, QSet<QString>& visited)
+{
+    QString result;
+    
+    if (visited.contains(root))
+    {
+        return result;
+    }
+    
+    visited.insert(root);
+    
+    if (adjacencyList.contains(root))
+    {
+        for (const QString& child : adjacencyList[root])
+        {
+            if (!visited.contains(child))
+            {
+                result += postorderTraversal(child, adjacencyList, visited);
+            }
+        }
+    }
+    
+    result += root + " → ";
+    
+    return result;
 }
 
