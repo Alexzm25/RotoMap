@@ -4,6 +4,7 @@
 #include "ui_MainWindow.h"
 #include "Graph.h"
 #include "GraphScene.h"
+#include "StyleSheetManager.h"
 
 class MainWindow : public QMainWindow
 {

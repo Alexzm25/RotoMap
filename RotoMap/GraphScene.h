@@ -35,6 +35,9 @@ private:
     QVector<QGraphicsItem*> m_graphItems;
     QVector<QGraphicsItem*> m_highlightItems;
     QString m_clickMode;
+    QPixmap m_pokeStopIcon;
+    QPixmap m_accidentSign;
+    QPixmap m_blockedSign;
     
     void drawVertex(Vertex* vertex);
     void drawEdge(Edge* edge);

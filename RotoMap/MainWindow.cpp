@@ -15,6 +15,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui.mainToolBar->addAction(ui.actionLoadRoutes);
     ui.mainToolBar->addAction(ui.actionSaveRoutes);
 
+    this->setStyleSheet(StyleSheetManager::getRotoMapStyleSheet());
+    this->setWindowTitle("RotoMap - Sistema de Rutas Inteligente");
+    
     setupScenes();
     connectSignals();
 }
@@ -104,11 +107,19 @@ void MainWindow::onLoadRoutes()
     if (FileManager::loadGraph(filename, m_graph))
     {
         updateScenes();
-        QMessageBox::information(this, "Éxito", "Rutas cargadas correctamente");
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("RotoMap - Éxito");
+        msgBox.setText("Rutas cargadas correctamente");
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.exec();
     }
     else
     {
-        QMessageBox::critical(this, "Error", "No se pudo cargar el archivo");
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("RotoMap - Error");
+        msgBox.setText("No se pudo cargar el archivo");
+        msgBox.setIcon(QMessageBox::Critical);
+        msgBox.exec();
     }
 }
 
@@ -122,11 +133,19 @@ void MainWindow::onSaveRoutes()
     
     if (FileManager::saveGraph(filename, m_graph))
     {
-        QMessageBox::information(this, "Éxito", "Rutas guardadas correctamente");
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("RotoMap - Éxito");
+        msgBox.setText("Rutas guardadas correctamente");
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.exec();
     }
     else
     {
-        QMessageBox::critical(this, "Error", "No se pudo guardar el archivo");
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("RotoMap - Error");
+        msgBox.setText("No se pudo guardar el archivo");
+        msgBox.setIcon(QMessageBox::Critical);
+        msgBox.exec();
     }
 }
 
@@ -157,10 +176,16 @@ void MainWindow::onVertexClicked(const QString& vertexName)
         {
             m_selectedVertex2 = vertexName;
             
-            bool ok;
-            double weight = QInputDialog::getDouble(this, "Peso de Arista",
-                                                    QString("Distancia entre %1 y %2 (km):").arg(m_selectedVertex1, m_selectedVertex2),
-                                                    0, 0, 10000, 1, &ok);
+            QInputDialog dialog(this);
+            dialog.setWindowTitle("RotoMap - Peso de Arista");
+            dialog.setLabelText(QString("Distancia entre %1 y %2 (km):").arg(m_selectedVertex1, m_selectedVertex2));
+            dialog.setDoubleValue(0);
+            dialog.setDoubleRange(0, 10000);
+            dialog.setDoubleDecimals(1);
+            dialog.resize(450, 150);
+            bool ok = dialog.exec();
+            double weight = dialog.doubleValue();
+            
             if (ok)
             {
                 m_graph->addEdge(m_selectedVertex1, m_selectedVertex2, weight);
@@ -176,10 +201,14 @@ void MainWindow::onEdgeClicked(Edge* edge)
 {
     if (m_currentAction == "addBlock")
     {
-        bool ok;
-        QString reason = QInputDialog::getText(this, "Bloquear Ruta",
-                                              QString("Razón del bloqueo en la ruta %1 - %2:").arg(edge->getFrom(), edge->getTo()),
-                                              QLineEdit::Normal, "", &ok);
+        QInputDialog dialog(this);
+        dialog.setWindowTitle("RotoMap - Bloquear Ruta");
+        dialog.setLabelText(QString("Razón del bloqueo en la ruta %1 - %2:").arg(edge->getFrom(), edge->getTo()));
+        dialog.setTextValue("");
+        dialog.resize(450, 150);
+        bool ok = dialog.exec();
+        QString reason = dialog.textValue();
+        
         if (ok)
         {
             edge->setStatus(EdgeStatus::Blocked);
@@ -190,10 +219,14 @@ void MainWindow::onEdgeClicked(Edge* edge)
     }
     else if (m_currentAction == "addAccident")
     {
-        bool ok;
-        QString reason = QInputDialog::getText(this, "Accidente en Ruta",
-                                              QString("Razón del accidente en la ruta %1 - %2:").arg(edge->getFrom(), edge->getTo()),
-                                              QLineEdit::Normal, "", &ok);
+        QInputDialog dialog(this);
+        dialog.setWindowTitle("RotoMap - Accidente en Ruta");
+        dialog.setLabelText(QString("Razón del accidente en la ruta %1 - %2:").arg(edge->getFrom(), edge->getTo()));
+        dialog.setTextValue("");
+        dialog.resize(450, 150);
+        bool ok = dialog.exec();
+        QString reason = dialog.textValue();
+        
         if (ok)
         {
             edge->setStatus(EdgeStatus::Accident);
@@ -209,8 +242,14 @@ void MainWindow::onEmptySpaceClicked(const QPointF& position)
     if (m_currentAction == "addVertex")
     {
         bool ok;
-        QString name = QInputDialog::getText(this, "Registrar Parada",
-                                            "Nombre de la parada:", QLineEdit::Normal, "", &ok);
+        QInputDialog dialog(this);
+        dialog.setWindowTitle("RotoMap - Registrar Parada");
+        dialog.setLabelText("Nombre de la parada:");
+        dialog.setTextValue("");
+        dialog.resize(400, 150);
+        ok = dialog.exec();
+        QString name = dialog.textValue();
+        
         if (!ok || name.isEmpty())
         {
             resetAction();
@@ -219,7 +258,11 @@ void MainWindow::onEmptySpaceClicked(const QPointF& position)
         
         if (m_graph->hasVertex(name))
         {
-            QMessageBox::warning(this, "Advertencia", "Ya existe una parada con ese nombre");
+            QMessageBox msgBox(this);
+            msgBox.setWindowTitle("RotoMap - Advertencia");
+            msgBox.setText("Ya existe una parada con ese nombre");
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.exec();
             resetAction();
             return;
         }
@@ -238,9 +281,13 @@ void MainWindow::onEmptySpaceClicked(const QPointF& position)
         
         if (!vertices.isEmpty())
         {
-            auto reply = QMessageBox::question(this, "Conectar Parada",
-                                              "¿Desea conectar esta parada con otra?",
-                                              QMessageBox::Yes | QMessageBox::No);
+            QMessageBox msgBox(this);
+            msgBox.setWindowTitle("RotoMap - Conectar Parada");
+            msgBox.setText("¿Desea conectar esta parada con otra?");
+            msgBox.setIcon(QMessageBox::Question);
+            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+            auto reply = msgBox.exec();
+            
             if (reply == QMessageBox::Yes)
             {
                 m_currentAction = "selectForEdge";
@@ -260,7 +307,11 @@ void MainWindow::onDeleteStop()
 {
     if (m_graph->getVertexCount() == 0)
     {
-        QMessageBox::warning(this, "Advertencia", "No hay paradas para eliminar");
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("RotoMap - Advertencia");
+        msgBox.setText("No hay paradas para eliminar");
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.exec();
         return;
     }
     
@@ -273,7 +324,11 @@ void MainWindow::onAddBlock()
 {
     if (m_graph->getEdgeCount() == 0)
     {
-        QMessageBox::warning(this, "Advertencia", "No hay rutas para bloquear");
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("RotoMap - Advertencia");
+        msgBox.setText("No hay rutas para bloquear");
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.exec();
         return;
     }
     
@@ -286,7 +341,11 @@ void MainWindow::onAddAccident()
 {
     if (m_graph->getEdgeCount() == 0)
     {
-        QMessageBox::warning(this, "Advertencia", "No hay rutas para reportar accidentes");
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("RotoMap - Advertencia");
+        msgBox.setText("No hay rutas para reportar accidentes");
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.exec();
         return;
     }
     
@@ -299,7 +358,11 @@ void MainWindow::onExecuteAlgorithm()
 {
     if (m_graph->getVertexCount() == 0)
     {
-        QMessageBox::warning(this, "Advertencia", "No hay paradas en el grafo");
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("RotoMap - Advertencia");
+        msgBox.setText("No hay paradas en el grafo");
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.exec();
         return;
     }
     
@@ -313,14 +376,23 @@ void MainWindow::onExecuteAlgorithm()
             vertices.append(v->getName());
         }
         
-        bool ok;
-        QString start = QInputDialog::getItem(this, "Seleccionar Inicio",
-                                              "Parada de inicio:", vertices, 0, false, &ok);
-        if (!ok) return;
+        QInputDialog startDialog(this);
+        startDialog.setWindowTitle("RotoMap - Seleccionar Inicio");
+        startDialog.setLabelText("Parada de inicio:");
+        startDialog.setComboBoxItems(vertices);
+        startDialog.resize(400, 150);
+        bool ok1 = startDialog.exec();
+        QString start = startDialog.textValue();
+        if (!ok1) return;
         
-        QString end = QInputDialog::getItem(this, "Seleccionar Destino",
-                                            "Parada de destino:", vertices, 0, false, &ok);
-        if (!ok) return;
+        QInputDialog endDialog(this);
+        endDialog.setWindowTitle("RotoMap - Seleccionar Destino");
+        endDialog.setLabelText("Parada de destino:");
+        endDialog.setComboBoxItems(vertices);
+        endDialog.resize(400, 150);
+        bool ok2 = endDialog.exec();
+        QString end = endDialog.textValue();
+        if (!ok2) return;
         
         PathResult result;
         QString algName;
@@ -350,13 +422,17 @@ void MainWindow::onExecuteAlgorithm()
             resultText.chop(3);
             resultText += QString("\n\nDistancia total: %1 km").arg(result.totalDistance, 0, 'f', 2);
             
-            ui.resultsLbl->setText(resultText);
+            ui.resultsText->setPlainText(resultText);
             m_lastResult = resultText;
         }
         else
         {
-            QMessageBox::warning(this, "Resultado", "No se encontró un camino");
-            ui.resultsLbl->setText("No se encontró un camino entre los puntos seleccionados");
+            QMessageBox msgBox(this);
+            msgBox.setWindowTitle("RotoMap - Resultado");
+            msgBox.setText("No se encontró un camino");
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.exec();
+            ui.resultsText->setPlainText("No se encontró un camino entre los puntos seleccionados");
         }
     }
     else
@@ -386,7 +462,7 @@ void MainWindow::onExecuteAlgorithm()
         }
         resultText += QString("\nPeso total: %1 km").arg(result.totalWeight, 0, 'f', 2);
         
-        ui.resultsLbl->setText(resultText);
+        ui.resultsText->setPlainText(resultText);
         m_lastResult = resultText;
     }
 }
@@ -395,7 +471,11 @@ void MainWindow::onExportResults()
 {
     if (m_lastResult.isEmpty())
     {
-        QMessageBox::warning(this, "Advertencia", "No hay resultados para exportar");
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("RotoMap - Advertencia");
+        msgBox.setText("No hay resultados para exportar");
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.exec();
         return;
     }
     
@@ -412,11 +492,20 @@ void MainWindow::onExportResults()
         QTextStream out(&file);
         out << m_lastResult;
         file.close();
-        QMessageBox::information(this, "Éxito", "Resultados exportados correctamente");
+        
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("RotoMap - Éxito");
+        msgBox.setText("Resultados exportados correctamente");
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.exec();
     }
     else
     {
-        QMessageBox::critical(this, "Error", "No se pudo exportar el archivo");
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("RotoMap - Error");
+        msgBox.setText("No se pudo exportar el archivo");
+        msgBox.setIcon(QMessageBox::Critical);
+        msgBox.exec();
     }
 }
 
@@ -424,7 +513,11 @@ void MainWindow::onSaveResults()
 {
     if (m_lastResult.isEmpty())
     {
-        QMessageBox::warning(this, "Advertencia", "No hay resultados para guardar");
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("RotoMap - Advertencia");
+        msgBox.setText("No hay resultados para guardar");
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.exec();
         return;
     }
     
@@ -443,11 +536,20 @@ void MainWindow::onSaveResults()
         out << "========================\n\n";
         out << m_lastResult;
         file.close();
-        QMessageBox::information(this, "Éxito", "Resultados guardados correctamente");
+        
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("RotoMap - Éxito");
+        msgBox.setText("Resultados guardados correctamente");
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.exec();
     }
     else
     {
-        QMessageBox::critical(this, "Error", "No se pudo guardar el archivo");
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("RotoMap - Error");
+        msgBox.setText("No se pudo guardar el archivo");
+        msgBox.setIcon(QMessageBox::Critical);
+        msgBox.exec();
     }
 }
 

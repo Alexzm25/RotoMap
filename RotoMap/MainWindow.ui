@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>RotoMap - Sistema de Rutas Inteligente</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>assets/RotomIcon.png</normaloff>assets/RotomIcon.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -39,6 +43,9 @@
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
             <widget class="QPushButton" name="btnSaveStop">
+             <property name="toolTip">
+              <string>Haga clic en el mapa para agregar una nueva parada</string>
+             </property>
              <property name="text">
               <string>Registrar Parada</string>
              </property>
@@ -46,6 +53,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="btnDeleteStop">
+             <property name="toolTip">
+              <string>Elimina una parada existente del mapa</string>
+             </property>
              <property name="text">
               <string>Eliminar Parada</string>
              </property>
@@ -53,6 +63,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="btnAddBlock">
+             <property name="toolTip">
+              <string>Bloquea una ruta para que no se use en algoritmos</string>
+             </property>
              <property name="text">
               <string>Añadir Bloqueo</string>
              </property>
@@ -60,6 +73,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="btnAddAccident">
+             <property name="toolTip">
+              <string>Marca una ruta con accidente (aumenta su peso x1.5)</string>
+             </property>
              <property name="text">
               <string>Añadir Accidente</string>
              </property>
@@ -67,6 +83,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="btnLinkRoute">
+             <property name="toolTip">
+              <string>Conecta dos paradas existentes con una nueva ruta</string>
+             </property>
              <property name="text">
               <string>Conectar Ruta</string>
              </property>
@@ -127,20 +146,13 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
-            <widget class="QLabel" name="label_2">
-             <property name="text">
-              <string>Seleccionar Algoritmo</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignmentFlag::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item>
             <widget class="QComboBox" name="comboBox"/>
            </item>
            <item>
             <widget class="QPushButton" name="btnExecuteAlg">
+             <property name="toolTip">
+              <string>Ejecuta el algoritmo seleccionado y muestra los resultados</string>
+             </property>
              <property name="text">
               <string>Ejecutar Algoritmo</string>
              </property>
@@ -160,20 +172,17 @@
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_9">
               <item>
-               <widget class="QLabel" name="resultsLbl">
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
-                </property>
-                <property name="wordWrap">
+               <widget class="QTextEdit" name="resultsText">
+                <property name="readOnly">
                  <bool>true</bool>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QPushButton" name="btnExportResults">
+                <property name="toolTip">
+                 <string>Exporta los resultados a un archivo de texto</string>
+                </property>
                 <property name="text">
                  <string>Exportar Resultados</string>
                 </property>
@@ -181,6 +190,9 @@
               </item>
               <item>
                <widget class="QPushButton" name="btnSaveResults">
+                <property name="toolTip">
+                 <string>Guarda los resultados con formato en un archivo</string>
+                </property>
                 <property name="text">
                  <string>Guardar Resultados</string>
                 </property>
